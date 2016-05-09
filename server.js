@@ -34,13 +34,14 @@ router.get('/', function(req, res){
 
 // Dishes
 router.route('/dishes')
-    //creation via POST
+    // Create via POST
     .post(function(req, res){
 
         var dish = new Dish();
 
         dish.name = req.body.name;
-        // dish.place = req.body.place;
+        dish.place = req.body.place;
+        dish.points = req.body.points;
         // dish.photo_url = req.body.photo_url;
 
         dish.save(function(err){
@@ -51,7 +52,7 @@ router.route('/dishes')
         });
     })
 
-    //showing all via GET
+    // List all via GET
     .get(function(req, res){
         Dish.find(function(err, dishes){
             if (err) res.send(err);
@@ -60,8 +61,9 @@ router.route('/dishes')
         });
     });
 
+// Handling one dish at a time
 router.route('/dishes/:dish_id')
-    // Showing off
+    // Show One
     .get(function(req, res){
         Dish.findById(req.params.dish_id, function(err, dish){
             if (err) res.send(err);
@@ -69,13 +71,15 @@ router.route('/dishes/:dish_id')
             res.json(dish);
         });
     })
-
+    // Update one
     .put(function(req, res){
         Dish.findById(req.params.dish_id, function(err, dish){
             if (err) res.send(err);
 
             //actual updating
             dish.name = req.body.name;
+            dish.place = req.body.place;
+            dish.points = req.body.points;
 
             dish.save(function(err){
                 if (err) res.send(err);
@@ -87,6 +91,7 @@ router.route('/dishes/:dish_id')
         });
     })
 
+    // Delete one
     .delete(function(req, res){
         Dish.remove({
             _id: req.params.dish_id
@@ -97,6 +102,7 @@ router.route('/dishes/:dish_id')
         });
     });
 
+//TODO handle dishes with all important variables
 
 //TODO Users and verification
 
